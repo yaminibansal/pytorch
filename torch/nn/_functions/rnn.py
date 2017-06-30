@@ -41,6 +41,23 @@ def LSTMCell(input, hidden, w_ih, w_hh, b_ih=None, b_hh=None):
 
     return hy, cy
 
+def ConvLSTM2dCell(input, hidden, w_ih, w_hh, in_kernel_size, hid_kernel_size, b_ih=None, b_hh=None, in_stride=(1,1), hid_stride=(1,1), in_padding=0, hid_padding=0, in_dilation=(1,1), hid_dilation=(1,1)):
+
+    hx, cx = hidden
+    gates = F.conv2d(input, w_ih, b_ih, in_stride, in_padding, in_dilation) + F.conv2d(hx, w_hh, b_hh, hid_stride, hid_padding, hid_dilation)
+
+    ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
+
+    ingate = F.sigmoid(ingate)
+    forgetgate = F.sigmoid(forgetgate)
+    cellgate = F.tanh(cellgate)
+    outgate = F.sigmoid(outgate)
+
+    cy = (forgetgate * cx) + (ingate * cellgate)
+    hy = outgate * F.tanh(cy)
+
+    return hy, cy
+
 
 def GRUCell(input, hidden, w_ih, w_hh, b_ih=None, b_hh=None):
 

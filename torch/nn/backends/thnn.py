@@ -35,6 +35,7 @@ def _initialize_backend():
     backend.register_function('RNNTanhCell', RNNTanhCell)
     backend.register_function('RNNReLUCell', RNNReLUCell)
     backend.register_function('LSTMCell', LSTMCell)
+    backend.register_function('ConvLSTM2dCell', ConvLSTM2dCell)
     backend.register_function('GRUCell', GRUCell)
     backend.register_function('Dropout', Dropout)
     backend.register_function('Dropout2d', FeatureDropout)
